@@ -210,18 +210,18 @@ export default function App() {
   const [job, setJob] = useState({client:"",name:"",type:"Patio / Paver Install",sqft:0});
 
   // ── LABOR ──
-  const [labor, setLabor] = useState([{role:"Crew Lead",hours:8,workers:1}]);
-  const addLabor = () => setLabor([...labor,{role:"General Laborer",hours:8,workers:1}]);
+  const [labor, setLabor] = useState([{role:"Crew Lead",hours:8,workers:1,rate:LABOR_RATES["Crew Lead"]}]);
+  const addLabor = () => setLabor([...labor,{role:"General Laborer",hours:8,workers:1,rate:LABOR_RATES["General Laborer"]}]);
   const removeLabor = i => setLabor(labor.filter((_,idx)=>idx!==i));
   const updateLabor = (i,k,v) => setLabor(labor.map((r,idx)=>idx===i?{...r,[k]:v}:r));
-  const totalLabor = labor.reduce((s,r)=>(s+(LABOR_RATES[r.role]||0)*r.hours*r.workers),0);
+  const totalLabor = labor.reduce((s,r)=>(s+(r.rate||0)*r.hours*r.workers),0);
 
   // ── EQUIPMENT ──
-  const [equip, setEquip] = useState([{item:"Mini Excavator",days:1}]);
-  const addEquip = () => setEquip([...equip,{item:"Skid Steer",days:1}]);
+  const [equip, setEquip] = useState([{item:"Mini Excavator",days:1,rate:EQUIPMENT_RATES["Mini Excavator"]}]);
+  const addEquip = () => setEquip([...equip,{item:"Skid Steer",days:1,rate:EQUIPMENT_RATES["Skid Steer"]}]);
   const removeEquip = i => setEquip(equip.filter((_,idx)=>idx!==i));
   const updateEquip = (i,k,v) => setEquip(equip.map((r,idx)=>idx===i?{...r,[k]:v}:r));
-  const totalEquip = equip.reduce((s,r)=>(s+(EQUIPMENT_RATES[r.item]||0)*r.days),0);
+  const totalEquip = equip.reduce((s,r)=>(s+(r.rate||0)*r.days),0);
 
   // ── MATERIALS ──
   const [mats, setMats] = useState([{name:"Concrete Pavers",qty:0,unit:"sq ft",unitCost:4.5}]);
@@ -415,10 +415,14 @@ export default function App() {
                 <SectionHead icon="👷" title="Labor"
                   right={<span style={{fontSize:13,color:"#b8963a",fontWeight:800}}>{fmt(totalLabor)}</span>} />
                 {labor.map((r,i)=>(
-                  <div key={i} style={{...grid("2fr 1fr 1fr 36px"),marginBottom:10}}>
+                  <div key={i} style={{...grid("2fr 90px 1fr 1fr 36px"),marginBottom:10}}>
                     <Field label={i===0?"Role":""}>
-                      <Sel value={r.role} onChange={v=>updateLabor(i,"role",v)}
-                        options={Object.entries(LABOR_RATES).map(([k,v])=>`${k} ($${v}/hr)`)} />
+                      <Sel value={r.role}
+                        onChange={v=>setLabor(labor.map((row,idx)=>idx===i?{...row,role:v,rate:LABOR_RATES[v]}:row))}
+                        options={Object.keys(LABOR_RATES)} />
+                    </Field>
+                    <Field label={i===0?"$/hr":""}>
+                      <Inp value={r.rate} onChange={v=>updateLabor(i,"rate",v)} min={0} step={1} />
                     </Field>
                     <Field label={i===0?"Hours":""}>
                       <Inp value={r.hours} onChange={v=>updateLabor(i,"hours",v)} min={0.5} step={0.5} />
@@ -439,10 +443,14 @@ export default function App() {
                 <SectionHead icon="🚜" title="Equipment / Rentals"
                   right={<span style={{fontSize:13,color:"#b8963a",fontWeight:800}}>{fmt(totalEquip)}</span>} />
                 {equip.map((r,i)=>(
-                  <div key={i} style={{...grid("2fr 1fr 36px"),marginBottom:10}}>
+                  <div key={i} style={{...grid("2fr 90px 1fr 36px"),marginBottom:10}}>
                     <Field label={i===0?"Equipment":""}>
-                      <Sel value={r.item} onChange={v=>updateEquip(i,"item",v)}
-                        options={Object.entries(EQUIPMENT_RATES).map(([k,v])=>`${k} ($${v}/day)`)} />
+                      <Sel value={r.item}
+                        onChange={v=>setEquip(equip.map((row,idx)=>idx===i?{...row,item:v,rate:EQUIPMENT_RATES[v]}:row))}
+                        options={Object.keys(EQUIPMENT_RATES)} />
+                    </Field>
+                    <Field label={i===0?"$/day":""}>
+                      <Inp value={r.rate} onChange={v=>updateEquip(i,"rate",v)} min={0} step={1} />
                     </Field>
                     <Field label={i===0?"Days":""}>
                       <Inp value={r.days} onChange={v=>updateEquip(i,"days",v)} min={0.5} step={0.5} />
