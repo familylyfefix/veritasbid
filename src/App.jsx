@@ -139,25 +139,27 @@ export default function App() {
 
   const isValidEmail = (e) => /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(e.trim());
 
-  const handleLeadSubmit = async () => {
+  const handleLeadSubmit = () => {
     if(!lead.firstName||!lead.businessName||!lead.email) return;
     if(!isValidEmail(lead.email)) { setEmailError("Please enter a valid email address (e.g. john@example.com)"); return; }
     setSubmitting(true);
-    // GHL webhook endpoint — replace with your actual GHL webhook URL
-    try {
-      await fetch("https://hooks.gohighlevel.com/YOUR_WEBHOOK_URL", {
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({
-          firstName: lead.firstName,
-          businessName: lead.businessName,
-          email: lead.email,
-          source: "VeritasBid",
-          tags: ["veritasbid-lead","contractor"],
-        }),
-      });
-    } catch(e) { /* fail silently — still show success */ }
-    setSubmitting(false);
+
+    // Fire-and-forget: create/update contact in GHL via Contact API
+    fetch("https://services.leadconnectorhq.com/contacts/", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${import.meta.env.VITE_GHL_API_KEY}`,
+        "Version": "2021-07-28",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email:       lead.email,
+        firstName:   lead.firstName,
+        companyName: lead.businessName,
+        tags:        ["VeritasBid"],
+        source:      "VeritasBid",
+      }),
+    }).catch(() => {/* fire-and-forget — never blocks unlock */});
 
     // Fire-and-forget: log to Veritas dashboard
     fetch("https://dashboardveritas.netlify.app/.netlify/functions/log-tool-usage", {
@@ -185,6 +187,7 @@ export default function App() {
       }),
     }).catch(() => {/* fire-and-forget — never blocks unlock */});
 
+    setSubmitting(false);
     setSubmitted(true);
   };
 
