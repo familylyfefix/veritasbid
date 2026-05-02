@@ -787,8 +787,7 @@ export default function App() {
                         Full results unlocked, {lead.firstName}!
                       </div>
                       <div style={{fontSize:13,color:"#5a8a6a",lineHeight:1.7,maxWidth:400,margin:"0 auto"}}>
-                        Your premium bid, per square foot breakdown, and bid intelligence are now visible above.<br/><br/>
-                        Check your inbox. Your free website audit for <strong style={{color:"#b8963a"}}>{lead.businessName}</strong> is on its way.
+                        Your premium bid, per square foot breakdown, and bid intelligence are now visible above.
                       </div>
                       <div style={{display:"flex",alignItems:"center",justifyContent:"center",
                         gap:10,marginTop:20,paddingTop:20,borderTop:"1px solid #1a3a2a"}}>
