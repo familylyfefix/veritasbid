@@ -132,6 +132,33 @@ export default function App() {
       });
     } catch(e) { /* fail silently — still show success */ }
     setSubmitting(false);
+
+    // Fire-and-forget: log to Veritas dashboard
+    fetch("https://dashboardveritas.netlify.app/.netlify/functions/log-tool-usage", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email:         lead.email,
+        bid_inputs: {
+          client:       job.client,
+          jobType:      job.type,
+          sqft:         job.sqft,
+          jobName:      job.name,
+          labor:        labor,
+          equipment:    equip,
+          materials:    mats,
+          variableCosts: variable,
+          monthlyJobs:  monthlyJobs,
+          fixedCosts:   fixed,
+          margin:       margin,
+        },
+        floor_price:   floorBid,
+        target_price:  targetBid,
+        premium_price: premiumBid,
+        user_agent:    navigator.userAgent,
+      }),
+    }).catch(() => {/* fire-and-forget — never blocks unlock */});
+
     setSubmitted(true);
   };
 
