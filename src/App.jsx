@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // ── preset data ──────────────────────────────────────────────
 const LABOR_RATES = {
@@ -49,11 +49,37 @@ const inputBase = {
   padding:"9px 11px", fontSize:13, fontFamily:"inherit", outline:"none",
 };
 
-const Inp = ({value,onChange,min=0,step=1,placeholder=""}) => (
-  <input type="number" min={min} step={step} value={value} placeholder={placeholder}
-    onChange={e=>onChange(parseFloat(e.target.value)||0)}
-    style={inputBase} />
-);
+const Inp = ({value, onChange, min=0, step=1, placeholder=""}) => {
+  const [display, setDisplay] = useState(value === 0 ? "" : String(value));
+
+  useEffect(() => {
+    // Sync when parent changes value externally (e.g. picking a material preset)
+    setDisplay(d => parseFloat(d) === value ? d : (value === 0 ? "" : String(value)));
+  }, [value]);
+
+  return (
+    <input
+      type="number"
+      inputMode="numeric"
+      min={min}
+      step={step}
+      placeholder={placeholder}
+      value={display}
+      onChange={e => {
+        const raw = e.target.value;
+        setDisplay(raw);
+        onChange(parseFloat(raw) || 0);
+      }}
+      onBlur={() => {
+        if (display === "" || isNaN(parseFloat(display))) {
+          setDisplay("");
+          onChange(0);
+        }
+      }}
+      style={inputBase}
+    />
+  );
+};
 
 const Sel = ({value,onChange,options}) => (
   <select value={value} onChange={e=>onChange(e.target.value)}
