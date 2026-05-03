@@ -162,23 +162,8 @@ export default function App() {
     if(!isValidPhone(lead.phone)) { setPhoneError("Please enter a valid phone number"); return; }
     setSubmitting(true);
 
-    // Fire-and-forget: create/update contact in GHL via Contact API
-    fetch("https://services.leadconnectorhq.com/contacts/", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${import.meta.env.VITE_GHL_API_KEY}`,
-        "Version": "2021-07-28",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email:       lead.email,
-        firstName:   lead.firstName,
-        companyName: lead.businessName,
-        phone:       lead.phone,
-        tags:        ["VeritasBid"],
-        source:      "VeritasBid",
-      }),
-    }).catch(() => {/* fire-and-forget — never blocks unlock */});
+    // GHL contact creation moved server-side into log-tool-usage Netlify Function.
+    // The function handles it after the Supabase write — locationId included, API key never in bundle.
 
     // Fire-and-forget: log to Veritas dashboard
     fetch("https://dashboardveritas.netlify.app/.netlify/functions/log-tool-usage", {
