@@ -132,16 +132,19 @@ const TABS = ["⚙️  Business Setup","📋  Job Builder","💰  Bid Results"];
 
 export default function App() {
   const [tab, setTab] = useState(0);
-  const [lead, setLead] = useState({firstName:"", businessName:"", email:""});
+  const [lead, setLead] = useState({firstName:"", businessName:"", email:"", phone:""});
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [emailError, setEmailError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
 
   const isValidEmail = (e) => /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(e.trim());
+  const isValidPhone = (p) => /\d{7,}/.test(p.replace(/\D/g, ""));
 
   const handleLeadSubmit = () => {
-    if(!lead.firstName||!lead.businessName||!lead.email) return;
+    if(!lead.firstName||!lead.businessName||!lead.email||!lead.phone) return;
     if(!isValidEmail(lead.email)) { setEmailError("Please enter a valid email address (e.g. john@example.com)"); return; }
+    if(!isValidPhone(lead.phone)) { setPhoneError("Please enter a valid phone number"); return; }
     setSubmitting(true);
 
     // Fire-and-forget: create/update contact in GHL via Contact API
@@ -156,6 +159,7 @@ export default function App() {
         email:       lead.email,
         firstName:   lead.firstName,
         companyName: lead.businessName,
+        phone:       lead.phone,
         tags:        ["VeritasBid"],
         source:      "VeritasBid",
       }),
@@ -167,6 +171,7 @@ export default function App() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email:         lead.email,
+        phone:         lead.phone,
         bid_inputs: {
           client:       job.client,
           jobType:      job.type,
@@ -734,43 +739,48 @@ export default function App() {
                         maxWidth:440,margin:"0 auto 24px"}}>
                         Unlock your premium tier bid, per square foot breakdown, and bid intelligence report — plus we'll send you a free audit of how your business looks online compared to your competitors.
                       </div>
-                      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",
+                      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",
                         gap:12,maxWidth:560,margin:"0 auto 16px"}}>
                         {[
-                          {key:"firstName",    label:"First Name",    placeholder:"John"},
-                          {key:"businessName", label:"Business Name", placeholder:"ABC Hardscape"},
-                          {key:"email",        label:"Email Address", placeholder:"john@example.com"},
+                          {key:"firstName",    label:"First Name",    placeholder:"John",             type:"text",  inputMode:"text"},
+                          {key:"businessName", label:"Business Name", placeholder:"ABC Hardscape",    type:"text",  inputMode:"text"},
+                          {key:"email",        label:"Email Address", placeholder:"john@example.com", type:"email", inputMode:"email"},
+                          {key:"phone",        label:"Phone Number",  placeholder:"(555) 123-4567",   type:"tel",   inputMode:"tel"},
                         ].map(f=>(
                           <div key={f.key} style={{textAlign:"left"}}>
                             <Label>{f.label}</Label>
                             <input
-                              type={f.key==="email"?"email":"text"}
+                              type={f.type}
+                              inputMode={f.inputMode}
                               placeholder={f.placeholder}
                               value={lead[f.key]}
                               onChange={e=>{
                                 setLead({...lead,[f.key]:e.target.value});
                                 if(f.key==="email") setEmailError("");
+                                if(f.key==="phone") setPhoneError("");
                               }}
                               style={{
-                                ...inputBase,background:"#080e16",
-                                ...(f.key==="email"&&emailError?{borderColor:"#cc4444"}:{}),
+                                ...inputBase, background:"#080e16",
+                                ...(f.key==="email"&&emailError ? {borderColor:"#cc4444"} : {}),
+                                ...(f.key==="phone"&&phoneError ? {borderColor:"#cc4444"} : {}),
                               }}
                             />
                             {f.key==="email"&&emailError&&(
-                              <div style={{fontSize:11,color:"#cc6060",marginTop:5,lineHeight:1.4}}>
-                                {emailError}
-                              </div>
+                              <div style={{fontSize:11,color:"#cc6060",marginTop:5,lineHeight:1.4}}>{emailError}</div>
+                            )}
+                            {f.key==="phone"&&phoneError&&(
+                              <div style={{fontSize:11,color:"#cc6060",marginTop:5,lineHeight:1.4}}>{phoneError}</div>
                             )}
                           </div>
                         ))}
                       </div>
                       <button
                         onClick={handleLeadSubmit}
-                        disabled={submitting||!lead.firstName||!lead.businessName||!isValidEmail(lead.email)}
+                        disabled={submitting||!lead.firstName||!lead.businessName||!isValidEmail(lead.email)||!isValidPhone(lead.phone)}
                         style={{
-                          background: (lead.firstName&&lead.businessName&&isValidEmail(lead.email))?"#b8963a":"#1a2a2a",
+                          background: (lead.firstName&&lead.businessName&&isValidEmail(lead.email)&&isValidPhone(lead.phone))?"#b8963a":"#1a2a2a",
                           border:"none",borderRadius:8,
-                          color:(lead.firstName&&lead.businessName&&isValidEmail(lead.email))?"#080e16":"#3a5a4a",
+                          color:(lead.firstName&&lead.businessName&&isValidEmail(lead.email)&&isValidPhone(lead.phone))?"#080e16":"#3a5a4a",
                           padding:"13px 36px",fontSize:13,fontWeight:900,
                           letterSpacing:"0.08em",cursor:"pointer",
                           fontFamily:"inherit",textTransform:"uppercase",
