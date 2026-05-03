@@ -171,6 +171,8 @@ export default function App() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email:         lead.email,
+        first_name:    lead.firstName,
+        business_name: lead.businessName,
         phone:         lead.phone,
         bid_inputs: {
           client:       job.client,
