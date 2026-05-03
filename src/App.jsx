@@ -865,6 +865,33 @@ export default function App() {
           </div>
         )}
       </div>
+
+      <footer style={{
+        marginTop: "48px",
+        padding: "24px 16px",
+        borderTop: "1px solid rgba(184, 150, 58, 0.2)",
+        textAlign: "center",
+        fontSize: "12px",
+        color: "#7a8a8a",
+        lineHeight: "1.6",
+      }}>
+        <div style={{ marginBottom: "8px" }}>
+          <a href="/privacy" style={{ color: "#b8963a", textDecoration: "none", margin: "0 8px" }}>
+            Privacy Policy
+          </a>
+          <span style={{ color: "#3a5a4a" }}>|</span>
+          <a href="/terms" style={{ color: "#b8963a", textDecoration: "none", margin: "0 8px" }}>
+            Terms of Service
+          </a>
+        </div>
+        <div>
+          © 2026 VeritasBid · Designed by{" "}
+          <a href="https://siteveritas.com" target="_blank" rel="noopener noreferrer"
+            style={{ color: "#b8963a", textDecoration: "none" }}>
+            Site Veritas
+          </a>
+        </div>
+      </footer>
     </div>
   );
 }
