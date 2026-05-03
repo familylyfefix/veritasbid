@@ -138,6 +138,21 @@ export default function App() {
   const [emailError, setEmailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
 
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("veritasbid_contractor");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.email && parsed.firstName && parsed.businessName && parsed.phone) {
+          setLead(parsed);
+          setSubmitted(true);
+        }
+      }
+    } catch (e) {
+      // corrupt or missing — ignore, gate will show normally
+    }
+  }, []);
+
   const isValidEmail = (e) => /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(e.trim());
   const isValidPhone = (p) => /\d{7,}/.test(p.replace(/\D/g, ""));
 
@@ -195,6 +210,11 @@ export default function App() {
     }).catch(() => {/* fire-and-forget — never blocks unlock */});
 
     setSubmitting(false);
+    try {
+      localStorage.setItem("veritasbid_contractor", JSON.stringify(lead));
+    } catch (e) {
+      // storage full or blocked — silent fail, doesn't affect unlock
+    }
     setSubmitted(true);
   };
 
@@ -801,6 +821,25 @@ export default function App() {
                         letterSpacing:"-0.02em",marginBottom:8}}>
                         Full results unlocked, {lead.firstName}!
                       </div>
+                      <button
+                        onClick={() => {
+                          localStorage.removeItem("veritasbid_contractor");
+                          setLead({ firstName: "", businessName: "", email: "", phone: "" });
+                          setSubmitted(false);
+                        }}
+                        style={{
+                          background: "transparent",
+                          border: "none",
+                          color: "#b8963a",
+                          fontSize: "12px",
+                          textDecoration: "underline",
+                          cursor: "pointer",
+                          padding: "4px 0",
+                          marginTop: "4px",
+                        }}
+                      >
+                        Not {lead.firstName}? Switch contractor
+                      </button>
                       <div style={{fontSize:13,color:"#5a8a6a",lineHeight:1.7,maxWidth:400,margin:"0 auto"}}>
                         Your premium bid, per square foot breakdown, and bid intelligence are now visible above.
                       </div>
