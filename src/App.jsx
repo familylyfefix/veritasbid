@@ -140,7 +140,7 @@ export default function App() {
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("veritasbid_contractor");
+      const saved = localStorage.getItem("ruggedbids_contractor");
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed.email && parsed.firstName && parsed.businessName && parsed.phone) {
@@ -193,7 +193,7 @@ export default function App() {
 
     setSubmitting(false);
     try {
-      localStorage.setItem("veritasbid_contractor", JSON.stringify(lead));
+      localStorage.setItem("ruggedbids_contractor", JSON.stringify(lead));
     } catch (e) {
       // storage full or blocked — silent fail, doesn't affect unlock
     }
@@ -318,7 +318,7 @@ export default function App() {
               </div>
               <h1 style={{margin:0,fontSize:24,fontWeight:900,
                 color:"#eef4fa",letterSpacing:"-0.03em"}}>
-                VeritasBid Calculator
+                RuggedBids Calculator
               </h1>
             </div>
           </div>
@@ -805,7 +805,7 @@ export default function App() {
                       </div>
                       <button
                         onClick={() => {
-                          localStorage.removeItem("veritasbid_contractor");
+                          localStorage.removeItem("ruggedbids_contractor");
                           setLead({ firstName: "", businessName: "", email: "", phone: "" });
                           setSubmitted(false);
                         }}
@@ -867,7 +867,7 @@ export default function App() {
           </a>
         </div>
         <div>
-          © 2026 VeritasBid · Designed by{" "}
+          © 2026 RuggedBids · Designed by{" "}
           <a href="https://siteveritas.com" target="_blank" rel="noopener noreferrer"
             style={{ color: "#b8963a", textDecoration: "none" }}>
             Site Veritas
