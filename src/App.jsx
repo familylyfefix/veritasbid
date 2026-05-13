@@ -338,7 +338,7 @@ export default function App() {
           <div>
             <div style={{background:"#0e1f10",border:"1px solid #2a4a2a",borderRadius:10,
               padding:"14px 18px",marginBottom:24,fontSize:13,color:"#7acc7a",lineHeight:1.6}}>
-              <strong>Set this up once.</strong> These are your monthly fixed costs — insurance, truck payment, phone, etc.
+              <strong>Set this up once.</strong> These are your monthly fixed costs: insurance, truck payment, phone, etc.
               The tool will automatically split them across your jobs so every bid recovers the right share.
             </div>
 
@@ -548,7 +548,7 @@ export default function App() {
                 </div>
                 <div style={{marginTop:12,fontSize:13,textAlign:"center",
                   color: margin<20?"#cc6060":margin<28?"#ccaa40":"#60cc80",fontWeight:700}}>
-                  {margin<20?"⚠️ Too low — a small overrun wipes your profit"
+                  {margin<20?"⚠️ Too low. A small overrun wipes your profit"
                     :margin<28?"△ Acceptable but tight"
                     :"✓ Healthy margin"}
                 </div>
@@ -640,7 +640,7 @@ export default function App() {
 
                 {/* Bid tiers — Floor + Target always visible, Premium locked behind email */}
                 <div style={{display:"flex",gap:14,marginBottom:20}}>
-                  <BidTile label="Floor — Never Go Below" amount={floorBid}
+                  <BidTile label="Floor: Never Go Below" amount={floorBid}
                     tag="Absolute Minimum" note="5% above total cost. Zero profit." />
                   <BidTile label={`Target Bid (${margin}% margin)`} amount={targetBid}
                     tag="⭐ Recommended Bid" highlight note="This is the number to submit." />
@@ -741,7 +741,7 @@ export default function App() {
                       </div>
                       <div style={{fontSize:13,color:"#5a8a6a",lineHeight:1.6,
                         maxWidth:440,margin:"0 auto 24px"}}>
-                        Unlock your premium tier bid, per square foot breakdown, and bid intelligence report — plus we'll send you a free audit of how your business looks online compared to your competitors.
+                        Unlock your premium tier bid, per square foot breakdown, and bid intelligence report, plus we'll send you a free audit of how your business looks online compared to your competitors.
                       </div>
                       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",
                         gap:12,maxWidth:560,margin:"0 auto 16px"}}>
