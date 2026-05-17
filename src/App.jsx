@@ -657,7 +657,7 @@ export default function App() {
                         textTransform:"uppercase",color:"#4a6070"}}>Premium Tier</div>
                       <div style={{fontSize:32}}>🔒</div>
                       <div style={{fontSize:12,color:"#4a6a7a",lineHeight:1.5,maxWidth:160}}>
-                        Enter your info below to unlock your premium bid + free website audit
+                        Enter your info below to unlock your premium bid
                       </div>
                     </div>
                   )}
@@ -737,11 +737,11 @@ export default function App() {
                       </div>
                       <div style={{fontSize:20,fontWeight:900,color:"#eef4fa",
                         letterSpacing:"-0.02em",marginBottom:8}}>
-                        Get your premium bid + free website audit
+                        Get your full bid breakdown
                       </div>
                       <div style={{fontSize:13,color:"#5a8a6a",lineHeight:1.6,
                         maxWidth:440,margin:"0 auto 24px"}}>
-                        Unlock your premium tier bid, per square foot breakdown, and bid intelligence report, plus we'll send you a free audit of how your business looks online compared to your competitors.
+                        Unlock your premium tier bid, per square foot breakdown, and full bid intelligence report.
                       </div>
                       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",
                         gap:12,maxWidth:560,margin:"0 auto 16px"}}>
@@ -793,7 +793,7 @@ export default function App() {
                         {submitting ? "Unlocking…" : "🔓 Unlock My Full Results →"}
                       </button>
                       <div style={{fontSize:11,color:"#3a5a4a",marginTop:12}}>
-                        No spam. No sales calls. Free audit included.
+                        No spam. No sales calls.
                       </div>
                     </>
                   ) : (
